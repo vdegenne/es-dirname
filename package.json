@@ -1,4 +1,6 @@
 {
   "name": "es-dirname",
-  "main": "main"
+  "version": "0.0.1",
+  "main": "es-dirname",
+  "keywords": ["dirname", "esm"]
 }
