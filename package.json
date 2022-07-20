@@ -1,6 +1,33 @@
 {
   "name": "es-dirname",
-  "version": "0.0.1",
-  "main": "es-dirname",
-  "keywords": ["dirname", "esm"]
+  "version": "0.0.2",
+  "type": "commonjs",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.cjs",
+      "default": "./dist/esm/index.mjs"
+    }
+  },
+  "scripts": {
+    "clear": "rm -rf dist",
+    "build": "npm run clear && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "tsc && mv ./dist/cjs/index.js ./dist/cjs/index.cjs",
+    "build:esm": "tsc --project tsconfig.esm.json && mv ./dist/esm/index.js ./dist/esm/index.mjs",
+    "build:types": "tsc --project tsconfig.types.json",
+    "test": "mocha ./test*"
+  },
+  "keywords": [
+    "dirname",
+    "esm",
+    "cjs"
+  ],
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "esm": "^3.2.25",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
+  }
 }
