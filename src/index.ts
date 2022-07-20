@@ -2,8 +2,6 @@ const DIRNAME_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?
 const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
 const WIN_DRIVE_REGEX = /^\/[A-Z]:\/*/;
 
-declare const __dirname: string;
-
 const pathDirname = (path: string) => {
   
   const dirname = DIRNAME_REGEX.exec(path)?.[1];
@@ -28,16 +26,20 @@ export const dirname = () => {
   } catch (e: any) {
     const initiator = e.stack.split('\n').slice(2, 3)[0]
 
+    console.debug("initiator", initiator);
+
     let path = EXTRACT_PATH_REGEX.exec(initiator)?.groups?.path
 
-    console.debug("path", path)
+    console.debug("path", path);
 
     if(!path) {
       throw new Error("Can't get __dirname!");
     }
 
-    if (path.indexOf('file') >= 0) {
-      path = new URL(path).pathname
+    const protocol = "file://";
+
+    if (path.indexOf(protocol) >= 0) {
+      path = path.slice(protocol.length);
     }
     dirname = pathDirname(path)
 
