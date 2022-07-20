@@ -1,7 +1,12 @@
+const DIRNAME_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
+const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
+const WIN_DRIVE_REGEX = /^\/[A-Z]:\/*/;
+
+declare const __dirname: string;
 
 const pathDirname = (path: string) => {
-  const regex = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
-  const dirname = regex.exec(path)?.[1];
+  
+  const dirname = DIRNAME_REGEX.exec(path)?.[1];
 
   if(dirname === undefined) {
     throw new Error(`Can't parse dirname from ${path}`);
@@ -16,27 +21,29 @@ const pathDirname = (path: string) => {
  * @see https://github.com/vdegenne/es-dirname/blob/master/es-dirname.js
  */
 export const dirname = () => {
+
   let dirname = '';
   try {
-      // @ts-ignore
-      throw new Error();
+    throw new Error();
   } catch (e: any) {
-      const initiator = e.stack.split('\n').slice(2, 3)[0]
-      let path = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/.exec(initiator)?.groups?.path
-  
-      if(!path) {
-          throw new Error("Can't get __dirname!");
-      }
-  
-      if (path.indexOf('file') >= 0) {
-        path = new URL(path).pathname
-      }
-      dirname = pathDirname(path)
+    const initiator = e.stack.split('\n').slice(2, 3)[0]
 
-      // TODO
-      // if (dirname[0] === '/' && platform() === 'win32') {
-      //   dirname = dirname.slice(1)
-      // }
+    let path = EXTRACT_PATH_REGEX.exec(initiator)?.groups?.path
+
+    console.debug("path", path)
+
+    if(!path) {
+      throw new Error("Can't get __dirname!");
+    }
+
+    if (path.indexOf('file') >= 0) {
+      path = new URL(path).pathname
+    }
+    dirname = pathDirname(path)
+
+    if (WIN_DRIVE_REGEX.test(dirname)) {
+      dirname = dirname.slice(1);
+    }
   }
   return dirname
 }
