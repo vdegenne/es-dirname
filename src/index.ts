@@ -1,14 +1,19 @@
-const DIRNAME_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
+const DIRNAME_POSIX_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
+const DIRNAME_WIN32_REGEX = /^((?:\.(?![^\\]))|(?:(?:\\?|)(?:[\s\S]*?)))(?:\\+?|)(?:(?:\.{1,2}|[^\\]+?|)(?:\.[^.\\]*|))(?:[\\]*)$/;
 const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
 const WIN_EMS_DRIVE_REGEX = /^\/[A-Z]:\/*/;
 const WIN_CJS_DRIVE_REGEX = /^[A-Z]:\\*/;
 
 const pathDirname = (path: string) => {
   
-  const dirname = DIRNAME_REGEX.exec(path)?.[1];
+  let dirname = DIRNAME_POSIX_REGEX.exec(path)?.[1];
 
-  if(dirname === undefined) {
-    throw new Error(`Can't parse dirname from ${path}`);
+  if (!dirname) {
+    dirname = DIRNAME_WIN32_REGEX.exec(path)?.[1];
+  }
+
+  if(!dirname) {
+    throw new Error(`Can't extract dirname from ${path}`);
   }
 
   return dirname;
@@ -46,9 +51,9 @@ export const dirname = () => {
       path = path.slice(1);
     }
 
-    if (WIN_CJS_DRIVE_REGEX.test(path)) {
-      path = path.replace(/\\/g, '/');
-    }
+    // if (WIN_CJS_DRIVE_REGEX.test(path)) {
+    //   path = path.replace(/\\/g, '/');
+    // }
 
     dirname = pathDirname(path)
 
