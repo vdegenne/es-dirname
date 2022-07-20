@@ -2,7 +2,6 @@ const DIRNAME_POSIX_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|
 const DIRNAME_WIN32_REGEX = /^((?:\.(?![^\\]))|(?:(?:\\?|)(?:[\s\S]*?)))(?:\\+?|)(?:(?:\.{1,2}|[^\\]+?|)(?:\.[^.\\]*|))(?:[\\]*)$/;
 const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
 const WIN_POSIX_DRIVE_REGEX = /^\/[A-Z]:\/*/;
-const WIN_WIN32_DRIVE_REGEX = /^[A-Z]:\\*/;
 
 const pathDirname = (path: string) => {
   
@@ -20,9 +19,14 @@ const pathDirname = (path: string) => {
 }
 
 /**
- * CJS and ESM compatible implementation for __dirname
+ * CJS and ESM compatible implementation for __dirname.
+ * 
+ * Works on
+ * * Node.js + Windows / Linux / MacOS + ESM / CJS
+ * 
+ * Contributions for other environments like GJS or Deno are welcome
+ * 
  * @returns What `__dirname` would return in CJS
- * @see https://github.com/vdegenne/es-dirname/blob/master/es-dirname.js
  */
 export const dirname = () => {
 
@@ -32,11 +36,7 @@ export const dirname = () => {
   } catch (e: any) {
     const initiator = e.stack.split('\n').slice(2, 3)[0]
 
-    console.debug("initiator", initiator);
-
     let path = EXTRACT_PATH_REGEX.exec(initiator)?.groups?.path
-
-    console.debug("path", path);
 
     if(!path) {
       throw new Error("Can't get __dirname!");
