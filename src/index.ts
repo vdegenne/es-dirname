@@ -1,6 +1,7 @@
 const DIRNAME_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
 const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
-const WIN_DRIVE_REGEX = /^\/[A-Z]:\/*/;
+const WIN_EMS_DRIVE_REGEX = /^\/[A-Z]:\/*/;
+const WIN_CJS_DRIVE_REGEX = /^[A-Z]:\\*/;
 
 const pathDirname = (path: string) => {
   
@@ -37,15 +38,20 @@ export const dirname = () => {
     }
 
     const protocol = "file://";
-
     if (path.indexOf(protocol) >= 0) {
       path = path.slice(protocol.length);
     }
+
+    if (WIN_EMS_DRIVE_REGEX.test(path)) {
+      path = path.slice(1);
+    }
+
+    if (WIN_CJS_DRIVE_REGEX.test(path)) {
+      path = path.replace(/\\/g, '/');
+    }
+
     dirname = pathDirname(path)
 
-    if (WIN_DRIVE_REGEX.test(dirname)) {
-      dirname = dirname.slice(1);
-    }
   }
   return dirname
 }
