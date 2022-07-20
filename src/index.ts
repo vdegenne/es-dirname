@@ -1,8 +1,8 @@
 const DIRNAME_POSIX_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
 const DIRNAME_WIN32_REGEX = /^((?:\.(?![^\\]))|(?:(?:\\?|)(?:[\s\S]*?)))(?:\\+?|)(?:(?:\.{1,2}|[^\\]+?|)(?:\.[^.\\]*|))(?:[\\]*)$/;
 const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
-const WIN_EMS_DRIVE_REGEX = /^\/[A-Z]:\/*/;
-const WIN_CJS_DRIVE_REGEX = /^[A-Z]:\\*/;
+const WIN_POSIX_DRIVE_REGEX = /^\/[A-Z]:\/*/;
+const WIN_WIN32_DRIVE_REGEX = /^[A-Z]:\\*/;
 
 const pathDirname = (path: string) => {
   
@@ -47,13 +47,9 @@ export const dirname = () => {
       path = path.slice(protocol.length);
     }
 
-    if (WIN_EMS_DRIVE_REGEX.test(path)) {
-      path = path.slice(1);
+    if (WIN_POSIX_DRIVE_REGEX.test(path)) {
+      path = path.slice(1).replace(/\//g, '\\');
     }
-
-    // if (WIN_CJS_DRIVE_REGEX.test(path)) {
-    //   path = path.replace(/\\/g, '/');
-    // }
 
     dirname = pathDirname(path)
 
