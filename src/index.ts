@@ -19,7 +19,7 @@ export const dirname = () => {
   let dirname = '';
   try {
       // @ts-ignore
-      ShadowsAlwaysDieTwice
+      throw new Error();
   } catch (e: any) {
       const initiator = e.stack.split('\n').slice(2, 3)[0]
       let path = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/.exec(initiator)?.groups?.path
