@@ -17,9 +17,10 @@
     "build:cjs": "tsc && mv ./dist/cjs/index.js ./dist/cjs/index.cjs",
     "build:esm": "tsc --project tsconfig.esm.json && mv ./dist/esm/index.js ./dist/esm/index.mjs",
     "build:types": "tsc --project tsconfig.types.json",
-    "test": "npm run test:node && npm run test:gjs",
+    "test": "npm run test:node && npm run test:deno && npm run test:gjs",
     "test:node": "mocha test/node",
-    "test:gjs": "gjs -m ./test/gjs/dirname.gjs.mjs"
+    "test:gjs": "gjs -m ./test/gjs/dirname.test.mjs",
+    "test:deno": "deno test ./test/deno/dirname.test.mjs"
   },
   "keywords": [
     "dirname",
