@@ -1,6 +1,6 @@
 # es-dirname
 
-Node.js module that returns the current script dirname. Similar to `__dirname` but also works in ES modules.
+Node.js / Gjs / Deno module that returns the current script dirname. Similar to `__dirname` but also works in CommonJs and ES modules.
 
 ## Installation
 
