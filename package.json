@@ -11,6 +11,9 @@
       "default": "./dist/esm/index.mjs"
     }
   },
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "clear": "rm -rf dist",
     "build": "npm run clear && npm run build:cjs && npm run build:esm && npm run build:types",
