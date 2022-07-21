@@ -6,17 +6,6 @@ export const esmDirname = () => {
     return pathDirname(fromFileUrl(import.meta.url));
 };
 
-
-
-// if (crossDirname === __dirname) {
-//     console.log("✔ dirname() should return the same string as __dirname")
-// } else {
-//     console.log("failed");
-//     exit(1);
-// }
-
-// exit(0);
-
 Deno.test("Deno", () => {
     const crossDirname = dirname();
     const _esmDirname = esmDirname();

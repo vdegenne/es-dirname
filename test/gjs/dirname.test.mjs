@@ -4,7 +4,7 @@ import { exit } from 'system';
 const byteArray = imports.byteArray;
 
 const getOriginalDirname = (path) => {
-    let [res, out, err, status] = GLib.spawn_command_line_sync(`node ${path}/get-original-dirname.js`);
+    let [res, out, err, status] = GLib.spawn_command_line_sync(`node ${path}/get-original-dirname.js`, null);
     err = err ? byteArray.toString(err) : err;
     const __dirname = out ? byteArray.toString(out).trim() : undefined;
     if (err) {
