@@ -30,14 +30,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-      - name: Install MacPorts
-        run: sudo apt-get --yes install gjs
-        run: curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        run: source ./macports-ci install
-        run: sudo port install fzf
-        run: fzf --version
+      - name: Setup MacPorts
+        uses: GiovanniBussi/macports-ci-action@master
       - name: Install GJS
-        run: port install gjs
+        run: sudo port install gjs
       - name: Install npm dependencies
         run: npm install
       - name: Build
