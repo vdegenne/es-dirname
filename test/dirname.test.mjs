@@ -9,7 +9,7 @@ export const esmDirname = () => {
     }
 };
 
-describe('ESM', () => {
+describe('Node.js ESM', () => {
     it('dirname() should return the same string as esmDirname', function () {
         console.debug("\tdirname() \t->", dirname());
         console.debug("\tesmDirname() \t->", esmDirname());

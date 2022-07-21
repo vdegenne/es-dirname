@@ -17,7 +17,9 @@
     "build:cjs": "tsc && mv ./dist/cjs/index.js ./dist/cjs/index.cjs",
     "build:esm": "tsc --project tsconfig.esm.json && mv ./dist/esm/index.js ./dist/esm/index.mjs",
     "build:types": "tsc --project tsconfig.types.json",
-    "test": "mocha test"
+    "test": "npm run test:node && npm run test:gjs",
+    "test:node": "mocha test",
+    "test:gjs": "gjs -m ./test/dirname.gjs.mjs"
   },
   "keywords": [
     "dirname",

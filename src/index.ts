@@ -1,6 +1,7 @@
 const DIRNAME_POSIX_REGEX = /^((?:\.(?![^\/]))|(?:(?:\/?|)(?:[\s\S]*?)))(?:\/+?|)(?:(?:\.{1,2}|[^\/]+?|)(?:\.[^.\/]*|))(?:[\/]*)$/;
 const DIRNAME_WIN32_REGEX = /^((?:\.(?![^\\]))|(?:(?:\\?|)(?:[\s\S]*?)))(?:\\+?|)(?:(?:\.{1,2}|[^\\]+?|)(?:\.[^.\\]*|))(?:[\\]*)$/;
-const EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
+const NODE_EXTRACT_PATH_REGEX = /(?<path>[^\(\s]+):[0-9]+:[0-9]+/;
+const GJS_EXTRACT_PATH_REGEX = /@(?<path>file:\/\/[^\(\s]+):[0-9]+:[0-9]+/;
 const WIN_POSIX_DRIVE_REGEX = /^\/[A-Z]:\/*/;
 
 const pathDirname = (path: string) => {
@@ -18,6 +19,45 @@ const pathDirname = (path: string) => {
   return dirname;
 }
 
+const getPathFromErrorStack = () => {
+
+  let path: string | undefined;
+
+  try {
+    throw new Error();
+  } catch (e: any) {
+
+    // Node.js
+    let initiator: string | undefined = e.stack.split('\n').slice(3, 4)[0]
+
+    // GJS
+    if(!initiator) {
+      initiator = e.stack.split('\n').slice(2, 3)[0]
+    }
+
+    if (initiator) {
+
+      // GJS
+      path = GJS_EXTRACT_PATH_REGEX.exec(initiator)?.groups?.path
+
+      // Node.js
+      if(!path) {
+        path = NODE_EXTRACT_PATH_REGEX.exec(initiator)?.groups?.path
+      }
+    }
+
+    if(!initiator) {
+      throw new Error("Can't get __dirname!");
+    }
+  }
+
+  if(!path) {
+    throw new Error("Can't get __dirname!");
+  }
+
+  return path;
+}
+
 /**
  * CJS and ESM compatible implementation for __dirname.
  * 
@@ -30,30 +70,23 @@ const pathDirname = (path: string) => {
  */
 export const dirname = () => {
 
-  let dirname = '';
-  try {
-    throw new Error();
-  } catch (e: any) {
-    const initiator = e.stack.split('\n').slice(2, 3)[0]
+  let path = getPathFromErrorStack();
 
-    let path = EXTRACT_PATH_REGEX.exec(initiator)?.groups?.path
-
-    if(!path) {
-      throw new Error("Can't get __dirname!");
-    }
-
-    const protocol = "file://";
-    if (path.indexOf(protocol) >= 0) {
-      path = path.slice(protocol.length);
-    }
-
-    if (WIN_POSIX_DRIVE_REGEX.test(path)) {
-      path = path.slice(1).replace(/\//g, '\\');
-    }
-
-    dirname = pathDirname(path)
-
+  if(!path) {
+    throw new Error("Can't get __dirname!");
   }
+
+  const protocol = "file://";
+  if (path.indexOf(protocol) >= 0) {
+    path = path.slice(protocol.length);
+  }
+
+  if (WIN_POSIX_DRIVE_REGEX.test(path)) {
+    path = path.slice(1).replace(/\//g, '\\');
+  }
+
+  const dirname = pathDirname(path)
+
   return dirname
 }
 
