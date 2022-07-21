@@ -18,8 +18,8 @@
     "build:esm": "tsc --project tsconfig.esm.json && mv ./dist/esm/index.js ./dist/esm/index.mjs",
     "build:types": "tsc --project tsconfig.types.json",
     "test": "npm run test:node && npm run test:gjs",
-    "test:node": "mocha test",
-    "test:gjs": "gjs -m ./test/dirname.gjs.mjs"
+    "test:node": "mocha test/node",
+    "test:gjs": "gjs -m ./test/gjs/dirname.gjs.mjs"
   },
   "keywords": [
     "dirname",

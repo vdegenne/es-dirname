@@ -1,4 +1,4 @@
-const dirname = require('../dist/cjs/index.cjs');
+const dirname = require('../../dist/cjs/index.cjs');
 const { expect } = require('chai');
 
 describe('Node.js CJS', () => {
