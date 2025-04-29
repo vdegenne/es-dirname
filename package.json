@@ -1,6 +1,40 @@
 {
-  "name": "es-dirname",
-  "version": "0.0.1",
-  "main": "es-dirname",
-  "keywords": ["dirname", "esm"]
+	"name": "es-dirname",
+	"type": "module",
+	"version": "1.0.0",
+	"main": "es-dirname",
+	"keywords": [
+		"dirname",
+		"esm"
+	],
+	"exports": {
+		".": {
+			"types": "./lib/index.d.ts",
+			"default": "./lib/index.js"
+		}
+	},
+	"scripts": {
+		"build": "wireit"
+	},
+	"wireit": {
+		"build": {
+			"command": "tsc --pretty",
+			"clean": "if-file-deleted",
+			"files": [
+				"./tsconfig.json",
+				"./src/"
+			],
+			"output": [
+				"./lib"
+			]
+		}
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.3",
+		"typescript": "^5.8.3",
+		"wireit": "^0.14.12"
+	},
+	"files": [
+		"./lib/"
+	]
 }

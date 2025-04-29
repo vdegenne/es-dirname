@@ -1,0 +1,15 @@
+node_modules
+.wireit
+dist
+lib
+public/material-symbols.woff2
+src/styles/stylesheets/symbols.css
+.firebase
+public/favicon.ico
+public/*64x64.png
+public/*180x180.png
+public/*192x192.png
+public/*512x512.png
+admin-scripts/serviceAccountKey.json
+.mdicon2svg
+.env
