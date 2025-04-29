@@ -1,12 +1,15 @@
 {
 	"name": "es-dirname",
 	"type": "module",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"main": "es-dirname",
 	"keywords": [
 		"dirname",
 		"esm"
 	],
+	"repository": {
+		"url": "git+https://github.com/vdegenne/es-dirname.git"
+	},
 	"exports": {
 		".": {
 			"types": "./lib/index.d.ts",
